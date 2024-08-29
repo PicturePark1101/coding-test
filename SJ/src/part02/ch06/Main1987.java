@@ -14,8 +14,7 @@ public class Main1987 {
   private static int C;
   private static int dx[] = {0, 0, 1, -1};
   private static int dy[] = {-1, 1, 0, 0};
-  private static List<Character> visitedChar;
-  private static boolean[][] visited;
+  private static boolean[] visited = new boolean[26];
 
   public static void main(String[] args) throws IOException {
 
@@ -25,15 +24,12 @@ public class Main1987 {
     R = Integer.parseInt(st.nextToken());
     C = Integer.parseInt(st.nextToken());
     board = new char[R][C];
-    visited = new boolean[R][C];
-    visitedChar = new ArrayList<>();
 
     for (int i = 0; i < R; i++) {
       board[i] = br.readLine().toCharArray();
     }
 
-    visited[0][0] = true;
-    visitedChar.add(board[0][0]);
+    visited[board[0][0] - 'A'] = true;
     System.out.println(dfs(0, 0, 1));
   }
 
@@ -45,12 +41,10 @@ public class Main1987 {
       int nC = c + dy[i];
 
       if (isValidPath(nR, nC)) {
-        if (!visited[nR][nC] && !isVisitedChar(board[nR][nC]))  {
-          visited[nR][nC] = true;
-          visitedChar.add(board[nR][nC]);
+        if (!visited[board[nR][nC] - 'A'])  {
+          visited[board[nR][nC] - 'A'] = true;
           maxLength = Math.max(maxLength, dfs(nR, nC, length + 1));
-          visited[nR][nC] = false;
-          visitedChar.remove((Character)board[nR][nC]);
+          visited[board[nR][nC] - 'A'] = false;
         }
       }
     }
@@ -58,11 +52,6 @@ public class Main1987 {
   }
 
   private static boolean isValidPath(int r, int c) {
-    if (r < 0 || r >= R || c < 0 || c >= C ) return false;
-    return true;
-  }
-
-  private static boolean isVisitedChar(char ch) {
-    return visitedChar.contains(ch);
+    return r >= 0 && r < R && c >= 0 && c < C;
   }
 }
